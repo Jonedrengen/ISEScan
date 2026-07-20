@@ -10,12 +10,16 @@
 function extract_config_key() {
     local key="$1"
     local config_file="$2"
-    grep "^$key=" "$config_file" | awk -F'=' '{print $2}'
+    local value=""
+    value=$(grep "^$key=" "$config_file" | awk -F'=' '{print $2}')
+
 
     if [[ -z "$value" ]]; then
         echo "Error: Key '$key' not found in config file '$config_file'."
         exit 1
     fi
+
+    echo "$value"
 }
 
 #input
