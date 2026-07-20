@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8G
 #SBATCH --time=01:00:00
-#SBATCH --partition=project
+#SBATCH --partition=standard
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "script location: ${BASH_SOURCE[0]}"
