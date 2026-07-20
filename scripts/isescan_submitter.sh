@@ -87,7 +87,7 @@ mkdir -p "$output_dir/compiled_results"
 #runner
 if [[ "$mode" == "default" ]]; then
     echo "Running in default mode"
-    bash "$script_dir/isescan_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$config_file"
+    sbatch "$script_dir/isescan_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$config_file"
 elif [[ "$mode" == "Docker" ]]; then
     echo "Running in Docker mode"
     bash "$script_dir/isescan_docker_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$extension"

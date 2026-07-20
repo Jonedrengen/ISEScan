@@ -41,7 +41,7 @@ while IFS= read -r sample;
 do
     echo "Processing sample: $sample"
     input_file="$input_folder/$sample"
-    output_sample_dir="$output_dir/$sample"
+    output_sample_dir="$output_dir/${sample%%.*}"
 
     # Create output directory for the sample
     mkdir -p "$output_sample_dir"
