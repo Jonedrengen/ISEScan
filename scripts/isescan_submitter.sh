@@ -16,7 +16,8 @@ function usage() {
     echo "  -o: Path to the output directory where results will be stored"
     echo "  -s: Path to the sample list file (one sample per line)"
     echo "  -e: File extension of the fasta files (default: fasta), note: do not include the dot"
-    echo "  -m: Mode of operation (optional)"
+    echo "  -m: Mode of operation (default: default, options: default, Docker)"
+    echo "  -c: Path to the config file (default: scripts/config.env)"
     exit 1
 }
 function validate_input() {
@@ -82,7 +83,16 @@ mkdir -p "$output_dir/logs"
 mkdir -p "$output_dir/compiled_results"
 
 #runner
-bash "$script_dir/isescan_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$config_file"
+if [[ "$mode" == "default" ]]; then
+    echo "Running in default mode"
+    bash "$script_dir/isescan_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$config_file"
+elif [[ "$mode" == "Docker" ]]; then
+    echo "Running in Docker mode"
+    bash "$script_dir/isescan_docker_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$extension"
+else
+    echo "Unknown mode: $mode. Exiting."
+    exit 1
+fi
 
 # aggregate results
 
