@@ -1,4 +1,11 @@
 #!/bin/bash
+#SBATCH -J ISESCAN_Runner
+#SBATCH --error=ISESCAN_submitter_%j.err
+#SBATCH --output=ISESCAN_submitter_%j.out
+#SBATCH --cpus-per-task=6
+#SBATCH --mem=16G
+#SBATCH --time=01:00:00
+#SBATCH --partition=standard
 
 function extract_config_key() {
     local key="$1"
@@ -16,6 +23,7 @@ input_folder="$1"
 sample_list="$2"
 output_dir="$3"
 config_file="$4"
+threads=${SLURM_CPUS_PER_TASK:-1}
 
 #unpack config
 conda_source_path=$(extract_config_key "conda_source_path" "$config_file")
@@ -35,7 +43,7 @@ do
     mkdir -p "$output_sample_dir"
 
     # Run ISEScan on the sample
-    isescan.py -i "$input_file" -o "$output_sample_dir"
+    isescan.py --seqfile "$input_file" --output "$output_sample_dir" --nthread "$threads"
 
 done < "$sample_list"
 
