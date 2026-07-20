@@ -50,6 +50,8 @@ function validate_input() {
     if [[ -z "$mode" ]]; then
         echo "No mode provided. Defaulting to 'default'."
         mode="default"
+        echo "setting script_dir to SLURM compatible path"
+        script_dir=$(grep "^script_dir=" "$config_file" | awk -F'=' '{print $2}')
     fi
 
     if [[ -z "$config_file" ]]; then
