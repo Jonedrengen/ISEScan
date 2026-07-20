@@ -1,4 +1,14 @@
 #!/bin/bash
+#SBATCH -J ISESCAN_submitter
+#SBATCH --error=ISESCAN_submitter_%j.err
+#SBATCH --output=ISESCAN_submitter_%j.out
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=8G
+#SBATCH --time=01:00:00
+#SBATCH --partition=project
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "script location: ${BASH_SOURCE[0]}"
 
 function usage() {
     echo "Usage: $0 -i <input_folder> -o <output_dir> -s <sample_list> -e [extension] -m [mode]"
@@ -41,11 +51,17 @@ function validate_input() {
         mode="default"
     fi
 
+    if [[ -z "$config_file" ]]; then
+        echo "No config file provided. Defaulting to 'scripts/config.env'."
+        echo "feel free to edit the config file"
+        config_file="scripts/config.env"
+    fi
+
 }
 
 
 # get input args
-while getopts "i:o:s:e:m:" opt; do
+while getopts "i:o:s:e:m:c:" opt; do
     case $opt in
         i) input_folder="$OPTARG" ;;
         o) output_dir="$OPTARG" ;;
@@ -65,6 +81,9 @@ mkdir -p "$output_dir"
 mkdir -p "$output_dir/logs"
 mkdir -p "$output_dir/compiled_results"
 
+#runner
+bash "$script_dir/isescan_runner.sh" "$input_folder" "$sample_list" "$output_dir" "$config_file"
 
+# aggregate results
 
 
