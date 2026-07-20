@@ -1,0 +1,70 @@
+#!/bin/bash
+
+function usage() {
+    echo "Usage: $0 -i <input_folder> -o <output_dir> -s <sample_list> -e [extension] -m [mode]"
+    echo "  -i: Path to the input folder containing fasta files"
+    echo "  -o: Path to the output directory where results will be stored"
+    echo "  -s: Path to the sample list file (one sample per line)"
+    echo "  -e: File extension of the fasta files (default: fasta), note: do not include the dot"
+    echo "  -m: Mode of operation (optional)"
+    exit 1
+}
+function validate_input() {
+    #This function validates input and fills in default values for optionals
+
+
+    #check if essential args filled
+    if [[ -z "$input_folder" || -z "$output_dir" || -z "$sample_list" ]]; then
+        echo "Error: Missing required arguments."
+        usage
+    fi
+
+    # check for existence of innput folder and sample list file
+    if [[ ! -d "$input_folder" ]]; then
+        echo "Error: Input folder '$input_folder' does not exist."
+        exit 1
+    fi
+
+    if [[ ! -f "$sample_list" ]]; then
+        echo "Error: Sample list file '$sample_list' does not exist."
+        exit 1
+    fi
+
+    #check for defaults
+    if [[ -z "$extension" ]]; then
+        echo "No file extension provided. Defaulting to 'fasta'."
+        extension="fasta"
+    fi
+
+    if [[ -z "$mode" ]]; then
+        echo "No mode provided. Defaulting to 'default'."
+        mode="default"
+    fi
+
+}
+
+
+# get input args
+while getopts "i:o:s:e:m:" opt; do
+    case $opt in
+        i) input_folder="$OPTARG" ;;
+        o) output_dir="$OPTARG" ;;
+        s) sample_list="$OPTARG" ;;
+        e) extension="$OPTARG" ;;
+        m) mode="$OPTARG" ;;
+        c) config_file="$OPTARG" ;;
+        *) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+    esac
+done
+
+#validate input and fill in default values for optionals
+validate_input
+
+#filesystem
+mkdir -p "$output_dir"
+mkdir -p "$output_dir/logs"
+mkdir -p "$output_dir/compiled_results"
+
+
+
+

@@ -14,7 +14,6 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 RUN /opt/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 RUN /opt/conda/bin/conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
-
 # creating conda env and installing isescan
 RUN /opt/conda/bin/conda create -n isescan_env -c bioconda -c conda-forge python=3.10 isescan -y
 
